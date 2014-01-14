@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 		exit(0);
 	}
 
+	InitSinusTable();
 	InitCuda();
 	InitLoadPicture();
 
@@ -239,6 +240,33 @@ SDL_Surface * ConvertFrom24to32 (SDL_Surface * source, SDL_PixelFormat *format32
 
 
 	return result;
+}
+
+//###################################################################################################
+
+void InitSinusTable()
+{
+	int i;
+
+	sinus = (signed int*) malloc(sizeof(signed int) * 320);
+
+	if (sinus==NULL)
+	{
+		printf("Error:fail to allocate mem for sinus table");
+		exit(1);
+	}
+
+	for (i=0;i<256;i++)
+	{
+		sinus[i] = round(256 * sin ((i*3.14)/128.0));
+	}
+
+	for (i=256;i<320;i++)
+	{	
+		sinus[i] = sinus[i-256];
+	}
+
+
 }
 
 //###################################################################################################
